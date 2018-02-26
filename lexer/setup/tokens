@@ -26,3 +26,8 @@ And &
 Multiply *
 Divide /
 Comment //
+Greater >
+GreaterEqual >=
+SortaClose <>
+NumberLit <d+.d+>
+ScientificLit <d.dd?[Ee][+-]d+>

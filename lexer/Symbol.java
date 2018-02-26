@@ -10,7 +10,7 @@ public class Symbol {
   // token kind of symbol
   private Tokens kind;
 
-  private Symbol( String n, Tokens kind ) {
+  private Symbol(String n, Tokens kind) {
     name = n;
     this.kind = kind;
   }
@@ -30,16 +30,16 @@ public class Symbol {
    * Return the unique symbol associated with a string.
    * Repeated calls to <tt>symbol("abc")</tt> will return the same Symbol.
    */
-  public static Symbol symbol( String newTokenString, Tokens kind ) {
-    Symbol s = symbols.get( newTokenString );
-    if( s == null ) {
-      if( kind == Tokens.BogusToken ) {
+  public static Symbol symbol(String newTokenString, Tokens kind) {
+    Symbol s = symbols.get(newTokenString);
+    if(s == null) {
+      if(kind == Tokens.BogusToken) {
         // bogus string so don't enter into symbols
         return null;
       }
       // System.out.println( "new symbol: " + u + " Kind: " + kind );
-      s = new Symbol( newTokenString, kind );
-      symbols.put( newTokenString, s );
+      s = new Symbol(newTokenString, kind);
+      symbols.put(newTokenString, s);
     }
 
     return s;

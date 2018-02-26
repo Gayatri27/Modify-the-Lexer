@@ -22,16 +22,15 @@ public class SourceReader {
    *  @param sourceFile the String describing the user's source file
    *  @exception IOException is thrown if there is an I/O problem
    */
-  public SourceReader( String sourceFile ) throws IOException {
-    System.out.println( "Source file: " + sourceFile );
-    System.out.println( "user.dir: " + System.getProperty( "user.dir" ));
-    source = new BufferedReader( new FileReader( sourceFile ));
+  public SourceReader(String sourceFile) throws IOException {
+    source = new BufferedReader(new FileReader(sourceFile));
+    lineno = 0;
   }
 
   void close() {
     try {
       source.close();
-    } catch( Exception e ) { /* no-op */ }
+    } catch(Exception e) { /* no-op */ }
   }
 
   /**
@@ -41,35 +40,47 @@ public class SourceReader {
    *  @IOException is thrown for IO problems such as end of file
    */
   public char read() throws IOException {
-    if( isPriorEndLine ) {
+    if(isPriorEndLine) {
       lineno++;
       position = -1;
       nextLine = source.readLine();
 
       if( nextLine != null ) {
-        System.out.println( "READLINE:   " + nextLine );
+        System.out.println("READLINE:   " + nextLine);
       }
 
       isPriorEndLine = false;
     }
 
-    if( nextLine == null ) {
+    if(nextLine == null) {
       // hit eof or some I/O problem
       throw new IOException();
     }
 
-    if( nextLine.length() == 0 ) {
+    if(nextLine.length() == 0) {
       isPriorEndLine = true;
       return ' ';
     }
 
     position++;
-    if( position >= nextLine.length() ) {
+    if(position >= nextLine.length()) {
       isPriorEndLine = true;
       return ' ';
     }
 
-    return nextLine.charAt( position );
+    return nextLine.charAt(position);
+  }
+
+  public void printFile() {
+    try {
+      String line;
+      while ((line = source.readLine()) != null) {
+        lineno++;
+        System.out.println("  " + lineno + ": " + line);
+      }
+    } catch (Exception e) {
+
+    }
   }
 
   /**
@@ -85,26 +96,4 @@ public class SourceReader {
   public int getLineno() {
     return lineno;
   }
-
-
-/*
-  public static void main( String args[] ) {
-    SourceReader s = null;
-
-    try {
-      s = new SourceReader( "t" );
-
-      while( true ) {
-        char ch = s.read();
-        System.out.println(
-           "Char: " + ch + " Line: " + s.lineno + "position: " + s.position
-        );
-      }
-    } catch( Exception e ) {}
-
-    if( s != null ) {
-      s.close();
-    }
-  }
-*/
 }
