@@ -59,14 +59,15 @@ public class Lexer {
    *  @param startPosition is the column in the source file where the int begins
    *  @param endPosition is the column in the source file where the int ends
    *  @param lineNumber is the line in the source file where the token exists
+   *  @param kind is the identified Token kind
    *  @return the int Token
    */
-  public Token newNumberToken(String number, int startPosition, int endPosition, int lineNumber) {
+  public Token newToken(String number, int startPosition, int endPosition, int lineNumber, Tokens kind) {
     return new Token(
       startPosition,
       endPosition,
       lineNumber,
-      Symbol.symbol(number, Tokens.INTeger)
+      Symbol.symbol(number, kind)
     );
   }
 
@@ -81,7 +82,7 @@ public class Lexer {
    */
   public Token makeToken(String s, int startPosition, int endPosition, int lineNumber) {
     // filter comments
-    if( s.equals("//") ) {
+    if(s.equals("//")) {
       try {
         int oldLine = source.getLineno();
 
@@ -154,7 +155,9 @@ public class Lexer {
 
     if(Character.isDigit(ch)) {
       // return number tokens
+
       String number = "";
+      Tokens token = Tokens.INTeger;
 
       try {
         do {
@@ -166,7 +169,50 @@ public class Lexer {
         atEOF = true;
       }
 
-      return newNumberToken(number, startPosition, endPosition, lineNumber);
+      try {
+        if('.' == ch) {
+          endPosition++;
+          number += ch;
+          ch = source.read();
+          do {
+            endPosition++;
+            number += ch;
+            ch = source.read();
+          } while(Character.isDigit(ch));
+        }
+      } catch(Exception e) {
+        atEOF = true;
+      }
+
+      if(isNumberLit(number)) {
+        token = Tokens.NumberLit;
+      }
+/*
+      try {
+        if('e' == ch) {
+          endPosition++;
+          number += ch;
+          ch = source.read();
+        }
+        if('+' == ch || '-' == ch) {
+          endPosition++;
+          number += ch;
+          ch = source.read();
+        }
+        do {
+          endPosition++;
+          number += ch;
+          ch = source.read();
+        } while(Character.isDigit(ch));
+      } catch(Exception e) {
+        atEOF = true;
+      }
+
+      if(isScientificLit(number)) {
+        token = Tokens.ScientificLit;
+      }
+*/
+      return newToken(number, startPosition, endPosition, lineNumber, token);
     }
 
     // At this point the only tokens to check for are one or two
@@ -203,10 +249,18 @@ public class Lexer {
     return makeToken(op, startPosition, endPosition, lineNumber);
   }
 
+  private boolean isNumberLit(String number) {
+    return number.matches("^\\d*\\.\\d+|\\d+\\.\\d*$");
+  }
+
+  private boolean isScientificLit(String number) {
+    return number.matches("^[+-]?(\\d+\\.\\d+|\\d+\\.|\\.\\d+|\\d+)([eE][+-]?\\d+)?$");
+  }
+
   public static void main(String args[]) {
     Token token;
     String filename;
-    Lexer lex;
+    Lexer lex = null;
 
     if(args.length != 1) {
       System.out.println("usage: java lexer.Lexer filename.x");

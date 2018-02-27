@@ -17,6 +17,8 @@ public class SourceReader {
     private boolean isPriorEndLine = true;
     private String nextLine;
 
+    private static StringBuilder stringBuilder = new StringBuilder();
+
   /**
    *  Construct a new SourceReader
    *  @param sourceFile the String describing the user's source file
@@ -45,7 +47,8 @@ public class SourceReader {
       position = -1;
       nextLine = source.readLine();
 
-      if( nextLine != null ) {
+      if(nextLine != null) {
+        stringBuilder.append("  " + lineno + ": " + nextLine + "\n");
         System.out.println("READLINE:   " + nextLine);
       }
 
@@ -72,15 +75,7 @@ public class SourceReader {
   }
 
   public void printFile() {
-    try {
-      String line;
-      while ((line = source.readLine()) != null) {
-        lineno++;
-        System.out.println("  " + lineno + ": " + line);
-      }
-    } catch (Exception e) {
-
-    }
+    System.out.println(stringBuilder.toString());
   }
 
   /**

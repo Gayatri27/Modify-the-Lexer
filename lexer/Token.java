@@ -30,9 +30,9 @@ public class Token {
   }
 
   public void print() {
-
     String tokenString;
-    if ((getKind() == Tokens.Identifier) || (getKind() == Tokens.INTeger)) {
+    if ((getKind() == Tokens.Identifier) || (getKind() == Tokens.INTeger) ||
+      (getKind() == Tokens.NumberLit) || (getKind() == Tokens.ScientificLit)) {
       tokenString = toString();
     } else {
       tokenString = TokenType.tokens.get(getKind()).toString();
