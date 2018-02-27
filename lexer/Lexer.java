@@ -179,39 +179,41 @@ public class Lexer {
             number += ch;
             ch = source.read();
           } while(Character.isDigit(ch));
+
+          if(isNumberLit(number)) {
+            token = Tokens.NumberLit;
+          }
         }
       } catch(Exception e) {
         atEOF = true;
       }
 
-      if(isNumberLit(number)) {
-        token = Tokens.NumberLit;
-      }
-/*
       try {
         if('e' == ch) {
           endPosition++;
           number += ch;
           ch = source.read();
+
+          if('+' == ch || '-' == ch) {
+            endPosition++;
+            number += ch;
+            ch = source.read();
+          }
+
+          do {
+            endPosition++;
+            number += ch;
+            ch = source.read();
+          } while(Character.isDigit(ch));
+
+          if(isScientificLit(number)) {
+            token = Tokens.ScientificLit;
+          }
         }
-        if('+' == ch || '-' == ch) {
-          endPosition++;
-          number += ch;
-          ch = source.read();
-        }
-        do {
-          endPosition++;
-          number += ch;
-          ch = source.read();
-        } while(Character.isDigit(ch));
       } catch(Exception e) {
         atEOF = true;
       }
 
-      if(isScientificLit(number)) {
-        token = Tokens.ScientificLit;
-      }
-*/
       return newToken(number, startPosition, endPosition, lineNumber, token);
     }
 
