@@ -38,14 +38,15 @@ public class Lexer {
    *  @param startPosition is the column in the source file where the token begins
    *  @param endPosition is the column in the source file where the token ends
    *  @param lineNumber is the line in the source file where the token exists
+   *  @param kind is the identified Token kind
    *  @return the Token; either an id or one for the reserved words
    */
-  public Token newIdToken(String id, int startPosition, int endPosition, int lineNumber) {
+  public Token newIdToken(String id, int startPosition, int endPosition, int lineNumber, Tokens kind) {
     return new Token(
       startPosition,
       endPosition,
       lineNumber,
-      Symbol.symbol(id, Tokens.Identifier)
+      Symbol.symbol(id, kind)
     );
   }
 
@@ -150,7 +151,14 @@ public class Lexer {
         atEOF = true;
       }
 
-      return newIdToken(id, startPosition, endPosition, lineNumber);
+      Tokens kind = Tokens.Identifier;
+      if(id.equals("number")) {
+        kind = Tokens.Number;
+      } else if(id.equals("scientific")) {
+        kind = Tokens.Scientific;
+      }
+
+      return newIdToken(id, startPosition, endPosition, lineNumber, Tokens.Identifier);
     }
 
     if(Character.isDigit(ch)) {

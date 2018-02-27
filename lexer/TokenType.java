@@ -41,5 +41,7 @@ public class TokenType {
      tokens.put(Tokens.SortaClose, Symbol.symbol("<>",Tokens.SortaClose));
      tokens.put(Tokens.NumberLit, Symbol.symbol("<d+.d+>",Tokens.NumberLit));
      tokens.put(Tokens.ScientificLit, Symbol.symbol("<d.dd?[Ee][+-]d+>",Tokens.ScientificLit));
+     tokens.put(Tokens.Number, Symbol.symbol("number",Tokens.Number));
+     tokens.put(Tokens.Scientific, Symbol.symbol("scientific",Tokens.Scientific));
    }
 }

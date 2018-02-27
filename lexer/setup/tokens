@@ -31,3 +31,5 @@ GreaterEqual >=
 SortaClose <>
 NumberLit <d+.d+>
 ScientificLit <d.dd?[Ee][+-]d+>
+Number number
+Scientific scientific
